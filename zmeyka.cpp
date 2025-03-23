@@ -167,19 +167,31 @@ void processInput() {
             if (cin >> s) {
                 queried = 0;
             }
-        } else s = " ";
-        bool ok = true;
-        for (int i = 0;i < difficulty;i++) {
-            if (curword[i] != s[i])ok = false;
+        } else {
+            s = " ";
         }
-        if (!ok)continue;
-        d = s[s.size() - 1];
-        if (d == "l")dir = mp(0, -1); // Движение влево
-        if (d == "r")dir = mp(0, 1); // Движение вправо
-        if (d == "u")dir = mp(-1, 0); // Движение вверх
-        if (d == "d")dir = mp(1, 0); // Движение вниз
-        if (d == "+")head->push(); // Увеличение змейки
-        genWord(); // Генерация нового слова
+
+        // Проверка длины строки
+        if (s.size() < difficulty) {
+            continue; // Пропустить итерацию, если строка слишком короткая
+        }
+
+        bool ok = true;
+        for (int i = 0; i < difficulty; i++) {
+            if (curword[i] != s[i]) ok = false;
+        }
+        if (!ok) continue;
+
+        // Проверка, что строка не пустая перед доступом к последнему символу
+        if (s.size() > 0) {
+            d = s[s.size() - 1];
+            if (d == "l") dir = mp(0, -1); // Движение влево
+            if (d == "r") dir = mp(0, 1); // Движение вправо
+            if (d == "u") dir = mp(-1, 0); // Движение вверх
+            if (d == "d") dir = mp(1, 0); // Движение вниз
+            if (d == "+") head->push(); // Увеличение змейки
+            genWord(); // Генерация нового слова
+        }
     }
 }
 
@@ -251,5 +263,39 @@ void showDifficultySettings() {
         cout << "Invalid choice. Setting to Medium difficulty." << endl;
         ease = 2;
         difficulty = 3;
+    }
+}
+
+
+// Функция для отображения главного меню
+void showMainMenu() {
+    cout << "==============================" << endl;
+    cout << "         Snake v1.5          " << endl;
+    cout << "==============================" << endl;
+    cout << "1. Start Game" << endl;
+    cout << "2. Difficulty Settings" << endl;
+    cout << "3. Exit" << endl;
+    cout << "==============================" << endl;
+    cout << "Controls: below the game field, a sequence of letters will appear. To change the direction, enter this sequence, followed one of the direction letters: r, l, u, or d" << endl;
+    cout << "==============================" << endl;
+    cout << "Choose an option: ";
+}
+
+// Главная функция программы
+int main() {
+    int choice;
+    while (true) {
+        showMainMenu();
+        cin >> choice;
+
+        if (choice == 1) {
+            startGame();
+        } else if (choice == 2) {
+            showDifficultySettings();
+        } else if (choice == 3) {
+            return 0; // Выход из игры
+        } else {
+            cout << "Invalid choice. Please try again." << endl;
+        }
     }
 }
